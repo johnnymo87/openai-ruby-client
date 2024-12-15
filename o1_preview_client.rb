@@ -9,11 +9,11 @@ require 'logger'
 # bundle exec ruby o1_preview_client.rb execute prompts/o1-preview-000001
 class O1PreviewCLI < Thor
   desc 'execute PROMPT_FILE', 'Execute the O1 Preview with a prompt from a file'
-  def execute(prompt_file)
+  def execute(prompt_file_path)
     begin
-      prompt = File.read(prompt_file)
+      prompt = File.read(prompt_file_path)
     rescue Errno::ENOENT
-      puts "Error: File '#{prompt_file}' not found."
+      puts "Error: File '#{prompt_file_path}' not found."
       exit(1)
     end
 
@@ -43,8 +43,10 @@ class O1PreviewCLI < Thor
       exit(1)
     end
 
-    File.write('log/conversations', "#{timestamp}\n", mode: 'a+')
-    File.write('log/conversations', "#{messages.to_json}\n", mode: 'a+')
+    prompt_file_name = File.basename(prompt_file_path)
+
+    File.write("log/#{prompt_file_name}_conversation", "#{timestamp}\n", mode: 'a+')
+    File.write("log/#{prompt_file_name}_conversation", "#{prompt}\n", mode: 'a+')
 
     meta = response.except('choices')
     puts "Metadata: #{meta}"
@@ -55,8 +57,16 @@ class O1PreviewCLI < Thor
     answer_meta['message'] = answer.except('content')
     puts "Answer metadata: #{answer_meta}"
 
-    File.write("log/openai_response_#{timestamp}", answer.fetch('content'))
-    puts "Response saved to log/openai_response_#{timestamp}"
+    timestamp = Time.now.strftime('%Y%m%d%H%M%S')
+
+    File.write("log/#{prompt_file_name}_openai_response_#{timestamp}", answer.fetch('content'))
+    File.write("log/#{prompt_file_name}_conversation", "#{timestamp}\n", mode: 'a+')
+    File.write("log/#{prompt_file_name}_conversation", "#{answer.fetch('content')}\n", mode: 'a+')
+
+    puts <<~INFO.strip.gsub(/\s+/, ' ')
+      Response saved to log/#{prompt_file_name}_openai_response_#{timestamp}
+      and appended to log/#{prompt_file_name}_conversation
+    INFO
   end
 end
 
