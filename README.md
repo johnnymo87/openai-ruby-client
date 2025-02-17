@@ -1,6 +1,6 @@
 ## openai-ruby-client
 
-This is just a personal script for how I use [the `openai-ruby` gem](https://github.com/alexrudall/ruby-openai) to interact with OpenAI's API, building and sending a prompt to [the `o1` model](https://platform.openai.com/docs/models/o1). To see if you have access to it, check like so:
+This is just a personal script for how I use [the `openai-ruby` gem](https://github.com/alexrudall/ruby-openai) to interact with OpenAI's API, building and sending a prompt to a reason model, e.g. [the `o1` model](https://platform.openai.com/docs/models/o1). To see if you have access to it, check like so:
 
 ```bash
 curl https://api.openai.com/v1/models -H "Authorization: Bearer $OPENAI_ACCESS_TOKEN"
@@ -52,11 +52,11 @@ This application requires [an OpenAI API key](https://platform.openai.com/docs/q
 
 ## Run
 
-Write a prompt in a file in the `prompts/` directory, e.g. `prompts/o1-preview-000001`. Consider using [this script](https://gist.github.com/johnnymo87/4701b6671730768ba95f19a5ee29a177) to merge many files into one in a way that's useful when prompting.
+Write a prompt in a file in the `prompts/` directory, e.g. `prompts/reasoning-model-000001`. Consider using [this script](https://gist.github.com/johnnymo87/4701b6671730768ba95f19a5ee29a177) to merge many files into one in a way that's useful when prompting.
 
-There's an `o1_preview_client.rb` file. Use it to execute the prompt.
+There's an `reasoning_model_client.rb` file. Use it to execute the prompt.
 ```
-bundle exec ruby o1_preview_client.rb execute prompts/o1-preview-000001
+bundle exec ruby reasoning_model_client.rb execute prompts/reasoning-model-000001
 ```
 The result will be in the `log/` directory. There's no support for follow up prompts, so if there's anything from the result that you want to use in a follow up prompt, you'll have to copy it manually.
 
