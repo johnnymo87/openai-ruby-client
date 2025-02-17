@@ -25,7 +25,28 @@ class O1PreviewCLI < Thor
       f.response :logger, Logger.new($stdout), bodies: true
     end
 
+    developer_message = <<~CONTENT
+      Formatting re-enabled.
+
+      As a general note when replying to me with code, for every file that
+      needs to change, just write out the entire file for me, or at least large
+      relevant chunks of it, so I can copy-paste it to my local file system.
+
+      Never ever send me a diff or a patch file, even if I provide you with
+      one. I will not be able to apply it. Instead, just send me the entire
+      file(s) that need to change.
+
+      However, in order to facilitate rapid code reviews, let's not change
+      unrelated code for e.g. style reasons.
+    CONTENT
+
     messages = [
+      # Markdown formatting: Starting with o1-2024-12-17, o1 models in the API
+      # will avoid generating responses with markdown formatting. To signal to
+      # the model when you do want markdown formatting in the response, include
+      # the string Formatting re-enabled on the first line of your developer
+      # message.
+      { role: 'developer', content: developer_message },
       { role: 'user', content: prompt }
     ]
 
@@ -33,8 +54,10 @@ class O1PreviewCLI < Thor
 
     response = client.chat(
       parameters: {
-        model: 'o1-preview',
-        messages: messages
+        model: 'o1',
+        # model: 'o3-mini',
+        messages: messages,
+        reasoning_effort: 'high'
       }
     )
 
