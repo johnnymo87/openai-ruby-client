@@ -1,6 +1,11 @@
 ## openai-ruby-client
 
-This is just a personal script for how I use [the `openai-ruby` gem](https://github.com/alexrudall/ruby-openai) to interact with OpenAI's API, building and sending a prompt to [the `o1-preview` model](https://platform.openai.com/docs/models/o1).
+This is just a personal script for how I use [the `openai-ruby` gem](https://github.com/alexrudall/ruby-openai) to interact with OpenAI's API, building and sending a prompt to [the `o1` model](https://platform.openai.com/docs/models/o1). To see if you have access to it, check like so:
+
+```bash
+curl https://api.openai.com/v1/models -H "Authorization: Bearer $OPENAI_ACCESS_TOKEN"
+```
+
 
 ## Install
 
