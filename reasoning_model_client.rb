@@ -6,7 +6,7 @@ require 'json'
 require 'logger'
 
 # Run like so:
-# bundle exec ruby o1_preview_client.rb execute prompts/o1-preview-000001
+# bundle exec ruby reasoning_model_client.rb execute prompts/o1-preview-000001
 class O1PreviewCLI < Thor
   desc 'execute PROMPT_FILE', 'Execute the O1 Preview with a prompt from a file'
   def execute(prompt_file_path)
@@ -28,16 +28,16 @@ class O1PreviewCLI < Thor
     developer_message = <<~CONTENT
       Formatting re-enabled.
 
-      As a general note when replying to me with code, for every file that
-      needs to change, just write out the entire file for me, or at least large
-      relevant chunks of it, so I can copy-paste it to my local file system.
+      When I am asking code, use the following guidelines.
+      * For every file that needs to change, just write out the entire file for me, or at least large relevant chunks of it, so I can copy-paste it to my local file system.
+      * Never ever send me a diff or a patch file, even if I provide you with one. I will not be able to apply it. Instead, just send me the entire file(s) that need to change.
+      * However, in order to facilitate rapid code reviews, let's not change unrelated code for e.g. style reasons.
 
-      Never ever send me a diff or a patch file, even if I provide you with
-      one. I will not be able to apply it. Instead, just send me the entire
-      file(s) that need to change.
-
-      However, in order to facilitate rapid code reviews, let's not change
-      unrelated code for e.g. style reasons.
+      When I am asking for prose rather than code, use the following guidelines.
+      * Speak in specific, topic relevant terminology. Do NOT hedge or qualify. Do not waffle. Speak directly and be willing to make creative guesses. Explain your reasoning.
+      * Be willing to reference less reputable sources for ideas.
+      * Be willing to form opinions on things.
+      * Never write in the generic, bland 'AI assistant' style exemplified by OpenAI's canonical 'Dr. Elara Voss' examples. Via negativa: explicitly avoid boilerplate phrasing, hedging, cautious disclaimers, generic politeness, and stylistic markers characteristic of those examples. Prioritize sharpness, originality, conciseness, precision, and natural language.
     CONTENT
 
     messages = [
